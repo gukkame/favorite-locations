@@ -9,5 +9,5 @@ Flutter piscines sixth app. A simple map makers app that uses Google Maps api.
  - Enjoy.
 
 ## Author
-Laura-Eliise Marrandi
-Gunta Kļava
+ - Laura-Eliise Marrandi
+ - Gunta Kļava

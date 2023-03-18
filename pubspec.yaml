@@ -22,5 +22,5 @@ flutter:
   assets:
     - assets/
     - assets/data.json
-    - assets/images
+    - assets/images/
   uses-material-design: true

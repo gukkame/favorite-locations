@@ -6,7 +6,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
   @override
   final Size preferredSize;
   final String title;
-  static const padding = 15;
+  static const padding = 10;
 
   const CustomAppBar({Key? key, required this.title})
       : preferredSize = const Size.fromHeight(kToolbarHeight + padding),
@@ -18,11 +18,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
         preferredSize: preferredSize,
         child: AppBar(
           toolbarHeight: kToolbarHeight + padding,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: primeGradient,
+            ),
+          ),
           title: Text(
             title,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 23.0,
+              fontSize: 20.0,
             ),
             textAlign: TextAlign.center,
           ),
