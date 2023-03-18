@@ -1,5 +1,5 @@
 name: map_markers
-description: Simple app that saves youre favorite destinations.
+description: Simple app that saves your favorite destinations.
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -22,5 +22,5 @@ flutter:
   assets:
     - assets/
     - assets/data.json
-    - assets/images
+    - assets/images/
   uses-material-design: true
