@@ -58,13 +58,13 @@ class _LoadingAnimationState extends State<LoadingAnimation> {
     }
     return Text(
       loadingText,
-      style: TextStyle(
+      style: const TextStyle(
           fontSize: 40.0, fontWeight: FontWeight.bold, color: primeColor),
     );
   }
 }
 
-Widget smallLoading = Center(
+Widget smallLoading = const Center(
     child: Padding(
   padding: EdgeInsets.only(top: 2),
   child: CircularProgressIndicator(
