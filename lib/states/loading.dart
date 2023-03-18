@@ -64,9 +64,16 @@ class _LoadingAnimationState extends State<LoadingAnimation> {
   }
 }
 
-Widget smallLoading = const Center(
-    child: Padding(
-  padding: EdgeInsets.only(top: 2),
-  child: CircularProgressIndicator(
-      valueColor: AlwaysStoppedAnimation<Color>(primeColor)),
-));
+class CircleLoadingAnimation extends StatelessWidget {
+  const CircleLoadingAnimation({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Padding(
+      padding: EdgeInsets.only(top: 2),
+      child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(primeColor)),
+    ));
+  }
+}
