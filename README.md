@@ -1,16 +1,13 @@
-# map_markers
+# Map Makers
 
-A new Flutter project.
+Flutter piscines sixth app. A simple map makers app that uses Google Maps api.
 
-## Getting Started
+## How to run
+ - Install flutter and make sure `flutter doctor` has no issues. 
+ - Open a virtual machine with android studio (I used Pixel 5 with Tiramisu). 
+ - When the virtual machine is up, run the program with `flutter run`.
+ - Enjoy.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Author
+Laura-Eliise Marrandi
+Gunta Kļava
