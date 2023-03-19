@@ -7,15 +7,14 @@ void navigate(BuildContext context, String routeName, {Object? args}) {
 
 // Extract arguments when navigating
 class Arguments {
-  late String title;
-
-  void printArgs() => debugPrint("name: $title");
+  late double? lat;
+  late double? lng;
 
   Arguments(BuildContext context) {
     var data = (ModalRoute.of(context)!.settings.arguments ??
         <String, dynamic>{}) as Map<String, dynamic>;
 
-    title =
-        data.containsKey("title") ? data["title"] as String : "Game of Thrones";
+    lat = data.containsKey("lat") ? data["lat"] : null;
+    lng = data.containsKey("lng") ? data["lng"] : null;
   }
 }

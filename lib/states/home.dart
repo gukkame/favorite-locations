@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
+import '../modules/navigate.dart';
 import '../widgets/app_bar.dart';
 
 import 'markers.dart';
@@ -14,7 +15,11 @@ const kGoogleApiKey = 'AIzaSyCp5EfjwJY4StgxAWjIIKim2tJ0N8L2TUw';
 
 class MyHomePage extends StatefulWidget {
   final String title;
-  const MyHomePage({super.key, required this.title});
+  late Arguments args;
+
+  MyHomePage(BuildContext context, {super.key, required this.title}) {
+    args = Arguments(context);
+  }
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -32,7 +37,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     titleOfPlace = widget.title;
-    _getCurrentLocation();
+    currentLocation = const LatLng(0, 0);
+    if (widget.args.lat != null && widget.args.lng != null) {
+      currentLocation = LatLng(widget.args.lat ?? 0, widget.args.lng ?? 0);
+    } else {
+      _getCurrentLocation();
+    }
   }
 
   Future<void> _onTapMap(LatLng position) async {

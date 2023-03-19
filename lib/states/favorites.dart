@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:map_markers/modules/colors.dart';
 import 'package:map_markers/modules/fetch.dart';
+import 'package:map_markers/modules/navigate.dart';
 import 'package:map_markers/states/loading.dart';
 import 'package:map_markers/widgets/app_bar.dart';
 
@@ -16,50 +15,57 @@ class Favorites extends StatefulWidget {
 }
 
 class _FavoritesState extends State<Favorites> {
+  List<Data> _dataList = [];
+
+  @override
+  void initState() {
+    fetchData("assets/data.json")
+        .then((value) => setState(() => {_dataList = value}));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: widget.title),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: FutureBuilder(
-          future: fetchData("assets/data.json"),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              List<Data> resp = snapshot.data ?? [];
-              return GridView.count(
-                crossAxisCount: 1,
-                childAspectRatio: 5,
-                mainAxisSpacing: 10.0,
-                shrinkWrap: true,
-                children: [
-                  for (var data in resp) FavoriteLocation(data: data),
-                  Container(
-                    alignment: Alignment.topCenter,
-                      child: resp.isNotEmpty
-                          ? Text(
-                              "Hint: double tap to remove",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color:
-                                    Color.lerp(primeColor, secondaryColor, 0.5),
-                              ),
-                            )
-                          : Text(
-                              "Go explore the world!",
-                              style: TextStyle(
-                                fontSize: 30.0,
-                                color:
-                                    Color.lerp(primeColor, secondaryColor, 0.4),
-                              ),
-                            ))
-                ],
-              );
-            } else {
-              return const CircleLoadingAnimation();
-            }
-          },
+        child: GridView.count(
+          crossAxisCount: 1,
+          childAspectRatio: 5,
+          mainAxisSpacing: 10.0,
+          shrinkWrap: true,
+          children: [
+            for (var data in _dataList)
+              FavoriteLocation(
+                data: data,
+                delete: (title) async {
+                  var newData = await removeTitle(title);
+                  setState(() {
+                    _dataList = newData;
+                  });
+                },
+              ),
+            Container(
+              alignment: Alignment.topCenter,
+              child: _dataList.isNotEmpty
+                  ? Text(
+                      "Hint: double tap to remove",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Color.lerp(primeColor, secondaryColor, 0.5),
+                      ),
+                    )
+                  : Text(
+                      "Go explore the world!",
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        color: Color.lerp(primeColor, secondaryColor, 0.4),
+                      ),
+                    ),
+            )
+          ],
         ),
       ),
     );
@@ -70,8 +76,9 @@ class FavoriteLocation extends StatelessWidget {
   late final String title;
   late final double lat;
   late final double lng;
+  late final Function delete;
 
-  FavoriteLocation({super.key, required Data data}) {
+  FavoriteLocation({super.key, required Data data, required this.delete}) {
     title = data.title;
     lat = data.lat;
     lng = data.lng;
@@ -101,7 +108,7 @@ class FavoriteLocation extends StatelessWidget {
                 ),
                 const Spacer(),
                 GestureDetector(
-                  onDoubleTap: () {},
+                  onDoubleTap: () => delete(title),
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius:
@@ -118,7 +125,8 @@ class FavoriteLocation extends StatelessWidget {
                 ),
                 const SizedBox(width: 5),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () =>
+                      navigate(context, "/", args: {"lat": lat, "lng": lng}),
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius:
