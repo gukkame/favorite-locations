@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import '../widgets/scaffold.dart';
+import 'markers.dart';
 
 const kGoogleApiKey = 'AIzaSyCp5EfjwJY4StgxAWjIIKim2tJ0N8L2TUw';
 
@@ -20,6 +21,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
+
+  var titleOfPlace = "";
+
   Future<void> _onTapMap(LatLng position) async {
     final result = await _places.searchNearbyWithRadius(
       Location(lat: position.latitude, lng: position.longitude),
@@ -30,7 +34,9 @@ class _MyHomePageState extends State<MyHomePage> {
       final place = result.results.first;
       final name = place.name;
       final description = place.formattedAddress;
-
+      setState(() {
+        titleOfPlace = name;
+      });
       // TODO: Display the name and description on the screen
     }
   }
@@ -40,11 +46,35 @@ class _MyHomePageState extends State<MyHomePage> {
   late GoogleMapController mapController;
   late LatLng currentLocation;
 
-  void _onMapCreated(GoogleMapController controller) {
-    // mapController = controller;
-    setState(() {
-      mapController = controller;
-    });
+  // void _onMapCreated(GoogleMapController controller) {
+  //   // mapController = controller;
+  //   setState(() {
+  //     mapController = controller;
+  //   });
+  // }
+
+  List<Marker> markers = [];
+  void _onMapCreated(GoogleMapController controller) async {
+    mapController = controller;
+    List<MarkerLocation> locations = await getMarkerLocations();
+
+    print("AAAA");
+    for (MarkerLocation location in locations) {
+      print(location);
+      print("BBBB");
+      final marker = Marker(
+        markerId: MarkerId(location.title),
+        position: LatLng(location.latitude, location.longitude),
+        infoWindow: InfoWindow(
+          title: location.title,
+          snippet: location.description,
+        ),
+      );
+      print(marker);
+      setState(() {
+        markers.add(marker);
+      });
+    }
   }
 
   Future<void> _getCurrentLocation() async {
@@ -76,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(titleOfPlace),
       ),
       body: SafeArea(
         child: Column(
@@ -87,13 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   target: currentLocation,
                   zoom: 12,
                 ),
-                markers: Set.from([
-                  Marker(
-                    markerId: MarkerId("current-location"),
-                    position: currentLocation,
-                    infoWindow: InfoWindow(title: "You are here"),
-                  )
-                ]),
+                markers: markers.toSet(),
                 mapType: MapType.normal,
                 myLocationEnabled: true,
                 compassEnabled: true,
@@ -149,6 +173,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final geometry = detail.result.geometry!;
     final lat = geometry.location.lat;
     final lng = geometry.location.lng;
+    print(currentLocation);
 
     setState(() {
       currentLocation = LatLng(lat, lng);
