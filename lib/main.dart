@@ -27,7 +27,7 @@ class StateManager extends StatelessWidget {
     return MaterialApp(
       title: title,
       theme: themeColors,
-      initialRoute: "/fav",
+      initialRoute: "/",
       routes: {
         "/": (context) => MyHomePage(title: title),
         "/info": (context) => Info(

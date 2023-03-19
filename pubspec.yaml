@@ -1,10 +1,10 @@
 name: map_markers
-description: Simple app that saves youre favorite destinations.
-publish_to: 'none'
+description: Simple app that saves your favorite destinations.
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.19.4 <3.0.0'
+  sdk: ">=2.19.4 <3.0.0"
 
 dependencies:
   http: ^0.13.3
@@ -12,6 +12,9 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   google_maps_flutter: ^2.2.5
+  geolocator: ^9.0.2
+  flutter_google_places_hoc081098: ^1.2.0
+  google_maps_webservice: ^0.0.19
 
 dev_dependencies:
   flutter_test:
