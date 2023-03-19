@@ -19,8 +19,8 @@ class MarkerLocation {
   factory MarkerLocation.fromJson(Map<String, dynamic> json) {
     return MarkerLocation(
       title: json['title'],
-      latitude: double.parse(json['lat']),
-      longitude: double.parse(json['lng']),
+      latitude: json['lat'],
+      longitude: json['lng'],
       description: json['description'],
     );
   }
@@ -53,14 +53,8 @@ Future<List<MarkerLocation>> getMarkerLocations() async {
   final data = json.decode(jsonString)['data'] as List<dynamic>;
   return data.map((json) => MarkerLocation(
     title: json['title'],
-    latitude: double.parse(json['lat']),
-    longitude: double.parse(json['lng']),
+    latitude: json['lat'],
+    longitude: json['lng'],
     description: json['description'],
   )).toList();
-}
-
-Future<List<dynamic>> loadJsonFromAsset() async {
-  String jsonString = await rootBundle.loadString('assets/data.json');
-  List<dynamic> data = json.decode(jsonString);
-  return data;
 }
