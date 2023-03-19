@@ -1,39 +1,24 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
-import "package:http/http.dart" as http;
+import 'package:flutter/services.dart';
 
-// Fetch data from an api
-class ApiClient {
-  final String baseUrl;
+Future<List<Data>> fetchData(String localUrl) async {
+  final String response = await rootBundle.loadString(localUrl);
+  final data = await json.decode(response);
 
-  ApiClient({required this.baseUrl});
-
-  // Fetch single data object
-  Future<dynamic> fetchData(String url) async {
-    final response = await http.get(Uri.parse('$baseUrl$url'));
-    if (response.statusCode == 200) {
-      final responseBody = json.decode(response.body);
-      return responseBody;
-    } else {
-      throw Exception('Failed to load data');
-    }
-  }
-
-  // Fetch data that is in a list
-  Future<List<dynamic>> fetchListData(String url) async {
-    debugPrint('$baseUrl$url');
-    final response = await http.get(Uri.parse('$baseUrl$url'));
-    if (response.statusCode == 200) {
-      final responseBody = json.decode(response.body);
-      return responseBody;
-    } else {
-      throw Exception('Failed to load data');
-    }
-  }
+  return List.generate(data["data"].length, (index) {
+    return Data(
+      title: data["data"][index]["title"],
+      lat: data["data"][index]["lat"],
+      lng: data["data"][index]["lng"],
+    );
+  });
 }
 
 class Data {
-  final String id;
+  final String title;
+  final double lat;
+  final double lng;
 
-  const Data({required this.id});
+  Data({required this.title, required this.lat, required this.lng});
 }
