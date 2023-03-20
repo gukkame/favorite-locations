@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:map_markers/modules/colors.dart';
 import 'package:map_markers/modules/fetch.dart';
@@ -19,8 +21,7 @@ class _FavoritesState extends State<Favorites> {
 
   @override
   void initState() {
-    fetchData("assets/data.json")
-        .then((value) => setState(() => {_dataList = value}));
+    fetchData("data.json").then((value) => setState(() => {_dataList = value}));
     super.initState();
   }
 
@@ -41,6 +42,7 @@ class _FavoritesState extends State<Favorites> {
                 data: data,
                 delete: (title) async {
                   var newData = await removeTitle(title);
+                  debugPrint("$newData");
                   setState(() {
                     _dataList = newData;
                   });

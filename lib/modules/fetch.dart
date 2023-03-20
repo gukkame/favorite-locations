@@ -1,13 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-Future<List<Data>> fetchData(String localUrl) async {
-  final String resp = await rootBundle.loadString(localUrl);
-  final data = await json.decode(resp);
-  return createDataList(data);
-}
+import 'package:flutter/cupertino.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Data {
   final String title;
@@ -17,13 +11,14 @@ class Data {
   Data({required this.title, required this.lat, required this.lng});
 }
 
+Future<List<Data>> fetchData(String localUrl) async {
+  final data = await readJsonFile(localUrl);
+  return createDataList(data);
+}
+
 Future<List<Data>> removeTitle(String title) async {
   final newData = <Map<String, dynamic>>[];
-
-  final String contents = await rootBundle.loadString('assets/data.json');
-  final data = jsonDecode(contents) as Map<String, dynamic>;
-
-  debugPrint("eh");
+  final Map<String, dynamic> data = await readJsonFile('data.json');
 
   for (final item in data['data'] as List<dynamic>) {
     final itemTitle = item['title'] as String;
@@ -31,15 +26,14 @@ Future<List<Data>> removeTitle(String title) async {
       newData.add(item as Map<String, dynamic>);
     }
   }
-
   final String encodedData =
       const JsonEncoder.withIndent('  ').convert({'data': newData});
-  final file = File('assets/data.json');
-  await file.writeAsString(encodedData);
 
+  await writeJsonToFile(encodedData, "data.json");
   return createDataList(<String, dynamic>{"data": newData});
 }
 
+// converts dynamic data to a Data list 
 List<Data> createDataList(dynamic data) {
   return List.generate(data["data"].length, (index) {
     return Data(
@@ -48,4 +42,18 @@ List<Data> createDataList(dynamic data) {
       lng: data["data"][index]["lng"],
     );
   });
+}
+
+// reads the content of a file
+Future<dynamic> readJsonFile(String localPath) async {
+  final dir = await getApplicationDocumentsDirectory();
+  final File file = File("${dir.path}$localPath");
+  return jsonDecode(await file.readAsString());
+}
+
+// writes the given data
+Future<void> writeJsonToFile(String data, String localPath) async {
+  final dir = await getApplicationDocumentsDirectory();
+  final File file = File("${dir.path}$localPath");
+  await file.writeAsString(data);
 }
