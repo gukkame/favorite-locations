@@ -42,7 +42,6 @@ class _FavoritesState extends State<Favorites> {
                 data: data,
                 delete: (title) async {
                   var newData = await removeTitle(title);
-                  debugPrint("$newData");
                   setState(() {
                     _dataList = newData;
                   });
