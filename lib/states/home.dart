@@ -33,7 +33,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Marker _tappedMarker = Marker(markerId: MarkerId("a"));
   Future<void> _onTapMap(LatLng latLng) async {
     late String _placeId;
-
     final apiKey = kGoogleApiKey;
 
     final urlPlaceId =
@@ -63,18 +62,27 @@ class _MyHomePageState extends State<MyHomePage> {
             position: LatLng(latLng.latitude, latLng.longitude),
             infoWindow: InfoWindow(
               title: name,
-              snippet: adress,
+              snippet: formatted_address,
             ),
             icon: BitmapDescriptor.defaultMarkerWithHue(
                 BitmapDescriptor.hueMagenta),
             onTap: () {
+              //* When newly added markers are tapped,
+
               setState(() {
-                _isMarkerTapped = true;
-                _tappedMarker = _tappedMarker.copyWith(
-                    infoWindowParam: InfoWindow(title: name));
+                _isMarkerTapped = false;
+                _tappedMarker = Marker(
+                    markerId: MarkerId(formatted_address),
+                    position: LatLng(latLng.latitude, latLng.longitude),
+                    infoWindow: InfoWindow(
+                      title: name,
+                      snippet: formatted_address,
+                    ),
+                    icon: _tappedMarker.icon);
               });
             });
         setState(() {
+          _isMarkerTapped = true;
           icon = Icons.favorite_border;
           //first marker is added
           if (markers.isEmpty || tappedPlace == false) {
@@ -88,48 +96,31 @@ class _MyHomePageState extends State<MyHomePage> {
           _tappedMarker = marker;
         });
       }
-    } else {
-      return;
     }
     return;
   }
 
-/////////////////////////////////////
-
   late GoogleMapController mapController;
   LatLng currentLocation = LatLng(59.3530117, 27.4133083);
-  void _onFavoriteButtonPressed(Marker tappedMarker) {
-    //todo when clicked, save to markers
 
-    // click on fav button and add to list tappedplace=false
-    var isPinkColor =
-        (BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueMagenta)
-                .toJson() as List<dynamic>)
-            .length;
-    //check icon if its pink then icon == favorite if pink icon == borderMarker
+//* onFavorites takes in  _tappedMarker, but you change data in markers list
+  void _onFavoriteButtonPressed() {
+    var isPinkColor = (_tappedMarker.icon.toJson() as List<dynamic>).length;
     setState(() {
       if (isPinkColor == 2) {
-        // markers.remove(tappedMarker);
-        // tappedMarker.icon = '';
-        Marker temp =
-            tappedMarker.copyWith(iconParam: BitmapDescriptor.defaultMarker);
-        // temp.icon = BitmapDescriptor.defaultMarker;
-        markers.add(temp);
-        tappedMarker = Marker(markerId: MarkerId('0'));
-        icon = Icons.favorite;
+        markers.removeWhere((item) => item.markerId == _tappedMarker.markerId);
 
+        Marker temp =
+            _tappedMarker.copyWith(iconParam: BitmapDescriptor.defaultMarker);
+
+        _tappedMarker = temp;
+        markers.add(temp);
+
+        icon = Icons.favorite;
         tappedPlace = false;
       } else {
-        icon = Icons.favorite_border;
+        tappedPlace = true;
       }
-      // if (markers.contains(tappedMarker)) {
-      //   // markers.remove(tappedMarker);
-      //   icon = Icons.favorite_border;
-      //   tappedPlace = false;
-      // } else {
-      //   markers.add(tappedMarker);
-      //   icon = Icons.favorite;
-      // }
     });
   }
 
@@ -143,12 +134,21 @@ class _MyHomePageState extends State<MyHomePage> {
           position: LatLng(location.latitude, location.longitude),
           infoWindow: InfoWindow(
             title: location.title,
-            snippet: location.description,
+            snippet: location.formatted_address,
           ),
           onTap: () {
+            //* When json added markers are tapped
             setState(() {
-              _tappedMarker = _tappedMarker.copyWith(
-                  infoWindowParam: InfoWindow(title: location.title));
+              _isMarkerTapped = false;
+              _tappedMarker = Marker(
+                markerId: MarkerId(location.title),
+                position: LatLng(location.latitude, location.longitude),
+                infoWindow: InfoWindow(
+                  title: location.title,
+                  snippet: location.formatted_address,
+                ),
+                icon: BitmapDescriptor.defaultMarker,
+              );
             });
           });
       setState(() {
@@ -228,7 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Text(_tappedMarker.infoWindow.title.toString()),
                     ElevatedButton.icon(
                         onPressed: () {
-                          _onFavoriteButtonPressed(_tappedMarker);
+                          _onFavoriteButtonPressed();
                         },
                         icon: Icon(icon),
                         label: Text('Like'))

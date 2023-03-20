@@ -7,13 +7,13 @@ class MarkerLocation {
   double latitude;
   double longitude;
   String title;
-  String description;
+  String formatted_address;
 
   MarkerLocation({
     required this.latitude,
     required this.longitude,
     required this.title,
-    required this.description,
+    required this.formatted_address,
   });
 
   factory MarkerLocation.fromJson(Map<String, dynamic> json) {
@@ -21,7 +21,7 @@ class MarkerLocation {
       title: json['title'],
       latitude: json['lat'],
       longitude: json['lng'],
-      description: json['description'],
+      formatted_address: json['formatted_address'],
     );
   }
 
@@ -30,7 +30,7 @@ class MarkerLocation {
       'lat': latitude,
       'lng': longitude,
       'title': title,
-      'description': description,
+      'formatted_address': formatted_address,
     };
   }
 }
@@ -56,7 +56,7 @@ Future<List<MarkerLocation>> getMarkerLocations() async {
             title: json['title'],
             latitude: json['lat'],
             longitude: json['lng'],
-            description: json['description'],
+            formatted_address: json['formatted_address'],
           ))
       .toList();
 }
