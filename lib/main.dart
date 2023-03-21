@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:map_markers/widgets/my_app.dart';
 
 import 'states/favorites.dart';
@@ -27,7 +26,7 @@ class StateManager extends StatelessWidget {
     return MaterialApp(
       title: title,
       theme: themeColors,
-      initialRoute: "/fav",
+      initialRoute: "/",
       routes: {
         "/": (context) => MyHomePage(context, title: title),
         "/info": (context) => Info(

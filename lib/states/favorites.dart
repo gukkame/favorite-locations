@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:map_markers/modules/colors.dart';
 import 'package:map_markers/modules/fetch.dart';
 import 'package:map_markers/modules/navigate.dart';
-import 'package:map_markers/states/loading.dart';
 import 'package:map_markers/widgets/app_bar.dart';
 
 class Favorites extends StatefulWidget {

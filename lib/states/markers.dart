@@ -7,13 +7,13 @@ class MarkerLocation {
   double latitude;
   double longitude;
   String title;
-  String description;
+  String formatted_address;
 
   MarkerLocation({
     required this.latitude,
     required this.longitude,
     required this.title,
-    required this.description,
+    required this.formatted_address,
   });
 
   factory MarkerLocation.fromJson(Map<String, dynamic> json) {
@@ -21,7 +21,7 @@ class MarkerLocation {
       title: json['title'],
       latitude: json['lat'],
       longitude: json['lng'],
-      description: json['description'],
+      formatted_address: json['formatted_address'],
     );
   }
 
@@ -30,7 +30,7 @@ class MarkerLocation {
       'lat': latitude,
       'lng': longitude,
       'title': title,
-      'description': description,
+      'formatted_address': formatted_address,
     };
   }
 }
@@ -48,13 +48,16 @@ void saveMarkerLocation(MarkerLocation location) async {
   await file.writeAsString(jsonString);
 }
 
+// get markers location from JSON
 Future<List<MarkerLocation>> getMarkerLocations() async {
   String jsonString = await rootBundle.loadString('assets/data.json');
   final data = json.decode(jsonString)['data'] as List<dynamic>;
-  return data.map((json) => MarkerLocation(
-    title: json['title'],
-    latitude: json['lat'],
-    longitude: json['lng'],
-    description: json['description'],
-  )).toList();
+  return data
+      .map((json) => MarkerLocation(
+            title: json['title'],
+            latitude: json['lat'],
+            longitude: json['lng'],
+            formatted_address: json['formatted_address'],
+          ))
+      .toList();
 }
