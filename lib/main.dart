@@ -1,43 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:map_markers/widgets/my_app.dart';
 
-import 'states/favorites.dart';
-import 'states/home.dart';
-import 'modules/colors.dart';
-import 'states/info.dart';
+import 'pages/favorite.dart';
+import 'pages/home.dart';
+import 'pages/info.dart';
+
+void main() {
+  runApp(const MyApp());
+}
 
 const String about =
     "This little app was created by Laura and Gunta! Hope you like it!";
+const String title = "Map Markers";
 
-void main() {
-  runApp(const MyApp(
-    title: "Map Makers",
-  ));
-}
-
-class StateManager extends StatelessWidget {
-  final String title;
-  final dynamic data;
-
-  const StateManager({super.key, required this.title, this.data});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: title,
-      theme: themeColors,
-      initialRoute: "/",
+      title: 'Map Markers',
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
       routes: {
-        "/": (context) => MyHomePage(context, title: title),
-        "/info": (context) => Info(
-              title: title,
+        '/': (context) => const MyHomePage(),
+        '/fav': (context) => FavoritePage(),
+        '/info': (context) => const Info(
+              title: '',
               about: about,
             ),
-        "/fav": (context) => Favorites(
-              title: title,
-            ),
       },
-      debugShowCheckedModeBanner: false,
     );
   }
 }

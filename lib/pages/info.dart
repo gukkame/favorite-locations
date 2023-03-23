@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:map_markers/modules/colors.dart';
-import 'package:map_markers/widgets/app_bar.dart';
+
+import '../widgets/bottom_nav_bar.dart';
+import '../widgets/nav_bar.dart';
 
 class Info extends StatelessWidget {
   final String title;
   final String about;
-
   const Info({super.key, required this.title, required this.about});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: title),
+      appBar: const NavBar(),
       body: Center(
         child: Padding(
             padding: const EdgeInsets.all(20.0),
@@ -19,9 +19,18 @@ class Info extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 17.0),
-                const ColoredText(text: "About us", size: 40.0, color: primeColor,),
+                const ColoredText(
+                  text: "About us",
+                  size: 40.0,
+                  color: primeColor,
+                ),
                 const SizedBox(height: 5),
-                Expanded(child: ColoredText(text: about, size: 17, color: primeColor,)),
+                Expanded(
+                    child: ColoredText(
+                  text: about,
+                  size: 17,
+                  color: primeColor,
+                )),
                 const InfoCard(
                   name: "Laura-Eliise Marrandi",
                   eMail: "laura-eliise@marrandi.ee",
@@ -38,6 +47,7 @@ class Info extends StatelessWidget {
               ],
             )),
       ),
+      bottomNavigationBar: BottomNavBar(index: 2),
     );
   }
 }
@@ -46,10 +56,8 @@ class InfoCard extends StatelessWidget {
   final String name;
   final String eMail;
   final String url;
-
   const InfoCard(
       {super.key, required this.name, required this.eMail, required this.url});
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -94,9 +102,7 @@ class InfoCard extends StatelessWidget {
 class RoundedImage extends StatelessWidget {
   final String url;
   final double rounding;
-
   const RoundedImage({super.key, required this.url, required this.rounding});
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -120,13 +126,11 @@ class ColoredText extends StatelessWidget {
   final String text;
   final double size;
   final Color color;
-
   const ColoredText(
       {super.key,
       required this.text,
       required this.size,
       this.color = Colors.white});
-
   @override
   Widget build(BuildContext context) {
     return Text(
